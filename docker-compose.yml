@@ -1,0 +1,40 @@
+version: '2.1'
+services:
+    postgres:
+        image: postgres:9.6
+        restart: always
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        ports:
+            - "5432:5432"
+    pgadmin4:
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=contato@company.com
+            - PGADMIN_DEFAULT_PASSWORD=postgres
+        ports:
+            - "15432:80"
+    webserver:
+        image: puckel/docker-airflow
+        restart: always
+        depends_on:
+            - postgres
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Local
+            - AIRFLOW_HOME=/usr/local/airflow
+            - FERNET_KEY=JtWntNvDYsDFWrIyTPjH3Wy7aaA0ijg9Tldpn9TdGB8=
+        volumes:
+            - .:/usr/local/airflow/
+        ports:
+            - "8080:8080"
+        command: webserver
+        privileged: true
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
