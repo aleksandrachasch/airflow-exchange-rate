@@ -12,7 +12,7 @@ ETL-процесс разбит на три задачи:
 
 1. `git clone https://github.com/aleksandrachasch/airflow-exchange-rate.git`
 2. `cd airflow-exhange-rate`
-3. `docker compose up`
+3. `docker-compose up`
 
 ## Инструкция по применению
 
